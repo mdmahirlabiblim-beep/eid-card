@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eid Mubarak Love Card</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    overflow:hidden;
+    background:black;
+    height:100vh;
+}
+
+/* Background Video/Image Glow */
+.bg{
+    position:fixed;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:brightness(0.45);
+}
+
+/* Overlay */
+.overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.25);
+}
+
+/* Floating Hearts */
+.heart{
+    position:absolute;
+    font-size:25px;
+    animation: float 6s linear infinite;
+    opacity:0.8;
+}
+
+@keyframes float{
+    0%{
+        transform:translateY(100vh) scale(0.5);
+        opacity:0;
+    }
+    20%{
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-120vh) scale(1.4);
+        opacity:0;
+    }
+}
+
+/* Intro Text */
+.intro{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    color:white;
+    text-align:center;
+    opacity:0;
+    animation:introShow 2s forwards;
+    z-index:10;
+}
+
+.intro h1{
+    font-size:55px;
+    margin-bottom:10px;
+}
+
+.intro p{
+    font-size:22px;
+}
+
+@keyframes introShow{
+    0%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(0.5);
+    }
+    100%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1);
+    }
+}
+
+.intro.hide{
+    animation:fadeOut 1.5s forwards;
+}
+
+@keyframes fadeOut{
+    to{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(0.8);
+    }
+}
+
+/* Final Card */
+.card-container{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    animation:showCard 2s forwards;
+    animation-delay:6s;
+}
+
+@keyframes showCard{
+    from{
+        opacity:0;
+        transform:scale(0.7);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+/* Main Image Card */
+.main-card{
+    width:380px;
+    max-width:90%;
+    border-radius:30px;
+    overflow:hidden;
+    box-shadow:0 0 40px rgba(255,255,255,0.4);
+    animation: glow 3s infinite alternate;
+}
+
+.main-card img{
+    width:100%;
+    display:block;
+}
+
+@keyframes glow{
+    from{
+        box-shadow:0 0 25px rgba(255,192,203,0.4);
+    }
+    to{
+        box-shadow:0 0 55px rgba(255,255,255,0.9);
+    }
+}
+
+/* Small Text */
+.bottom-text{
+    position:absolute;
+    bottom:30px;
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:20px;
+    opacity:0;
+    animation:showText 2s forwards;
+    animation-delay:8s;
+    z-index:5;
+}
+
+@keyframes showText{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Play Button */
+.play-btn{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    width:50px;
+    height:50px;
+    background:rgba(255,255,255,0.2);
+    border:2px solid white;
+    border-radius:50%;
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all 0.3s ease;
+    z-index:20;
+}
+
+.play-btn:hover{
+    background:rgba(255,255,255,0.4);
+    transform:scale(1.1);
+}
+
+.play-btn.playing{
+    background:rgba(255,100,100,0.3);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Background Music -->
+<audio id="bgAudio" muted loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5a7f847cfd.mp3?filename=beautiful-arabic-background-music-110624.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Play Button for Audio -->
+<button class="play-btn" id="playBtn" title="Play Music">🔊</button>
+
+<!-- Background -->
+<img class="bg" src="1000033270.png" alt="Background">
+
+<div class="overlay"></div>
+
+<!-- Floating Hearts -->
+<div class="heart" style="left:10%; animation-delay:0s;">❤️</div>
+<div class="heart" style="left:25%; animation-delay:2s;">💖</div>
+<div class="heart" style="left:40%; animation-delay:4s;">💕</div>
+<div class="heart" style="left:60%; animation-delay:1s;">💘</div>
+<div class="heart" style="left:80%; animation-delay:3s;">💞</div>
+
+<!-- Intro -->
+<div class="intro" id="intro">
+    <h1>🌙 Eid Mubarak 🌙</h1>
+    <p>For Someone Very Special ❤️</p>
+</div>
+
+<!-- Final Card -->
+<div class="card-container">
+    <div class="main-card">
+        <img src="1000033270.png" alt="Eid Card">
+    </div>
+</div>
+
+<!-- Bottom Text -->
+<div class="bottom-text">
+    ✨ May Allah Keep You Smiling Forever ❤️
+</div>
+
+<script>
+
+// Hide intro after 4 seconds
+setTimeout(()=>{
+    document.getElementById("intro").classList.add("hide");
+},4000);
+
+// Play/Pause button for music
+const playBtn = document.getElementById("playBtn");
+const bgAudio = document.getElementById("bgAudio");
+
+playBtn.addEventListener("click", () => {
+    if (bgAudio.paused) {
+        bgAudio.play();
+        bgAudio.muted = false;
+        playBtn.classList.add("playing");
+        playBtn.textContent = "🔊";
+    } else {
+        bgAudio.pause();
+        playBtn.classList.remove("playing");
+        playBtn.textContent = "🔇";
+    }
+});
+
+</script>
+
+</body>
+</html>
